@@ -44,18 +44,39 @@ public class InputManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetButtonDown("Fire1"))
-        { 
-            // Instantiate the projectile at the position and rotation of this transform
-            Transform clone = (Transform) Instantiate(projectile, transform.position, transform.rotation);
-
-            // Add force to the cloned object in the object's forward direction
-            clone.GetComponent<Rigidbody>().AddForce(transform.forward * bulletSpeed);
+        if (Input.GetButtonDown("Fire"))
+        {
+            GameObject camera = GameObject.Find("Main Camera");
+            Transform clone = (Transform) Instantiate(projectile, camera.transform.position + camera.transform.forward, transform.rotation);
+            clone.GetComponent<Rigidbody>().AddForce(camera.transform.forward * bulletSpeed);
         }
 
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-        transform.Translate(new Vector3(horizontal, vertical));
-        debugText.GetComponent<Text>().text = "" + horizontal + " " + vertical;
+        if (Input.GetButtonDown("Jump"))
+        {
+            float distToGround = GetComponent<Collider>().bounds.extents.y;
+            if (Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f))
+            {
+                GetComponent<Rigidbody>().AddForce(new Vector3(0, 10, 0), ForceMode.Impulse);
+            }
+        }
+
+        if (Input.GetButton("Move"))
+        {
+            transform.position += transform.forward * Time.deltaTime * 5;
+        }
+
+        if (Input.GetButton("MoveBack"))
+        {
+            transform.position -= transform.forward * Time.deltaTime * 5;
+        }
+
+
+        //CharacterController controller = GetComponent<CharacterController>();
+        //Vector3 moveDirection = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), Input.GetAxis("Forward"));
+        ////moveDirection = transform.TransformDirection(moveDirection);
+        //debugText.GetComponent<Text>().text = moveDirection.ToString();
+        //controller.Move(moveDirection);
+
+
     }
 }
