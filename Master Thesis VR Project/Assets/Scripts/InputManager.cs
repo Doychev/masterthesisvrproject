@@ -4,6 +4,7 @@ public class InputManager : MonoBehaviour {
 
     public Transform projectile;
     public float bulletSpeed;
+    public int movementSpeed;
 
     public GameObject debugText;
 
@@ -33,25 +34,25 @@ public class InputManager : MonoBehaviour {
         if (Input.GetButton("Move"))
         {
             GameObject cameraObject = GameObject.Find("Main Camera");
-            transform.position += cameraObject.transform.forward * Time.deltaTime * 5;
+            transform.position += cameraObject.transform.forward * Time.deltaTime * movementSpeed;
         }
 
         if (Input.GetButton("MoveBack"))
         {
             GameObject cameraObject = GameObject.Find("Main Camera");
-            transform.position -= cameraObject.transform.forward * Time.deltaTime * 5;
+            transform.position -= cameraObject.transform.forward * Time.deltaTime * movementSpeed;
         }
 
         if (Input.GetButton("MoveLeft"))
         {
             GameObject cameraObject = GameObject.Find("Main Camera");
-            transform.position -= cameraObject.transform.right * Time.deltaTime * 5;
+            transform.position -= cameraObject.transform.right * Time.deltaTime * movementSpeed;
         }
 
         if (Input.GetButton("MoveRight"))
         {
             GameObject cameraObject = GameObject.Find("Main Camera");
-            transform.position += cameraObject.transform.right * Time.deltaTime * 5;
+            transform.position += cameraObject.transform.right * Time.deltaTime * movementSpeed;
         }
 
         if (Input.GetButton("Reset"))
@@ -73,5 +74,5 @@ public class InputManager : MonoBehaviour {
 //2 - circle?
 //3 - triangle?
 //6 - share?
-//8 - l1?
-//9 - r1?
+//8 - l1? -> touchpad
+//9 - not working?
