@@ -5,7 +5,7 @@ public class CollisionHandler : MonoBehaviour {
 
     public void OnCollisionEnter (Collision col)
     {
-        if(col.gameObject.tag.Equals("Block"))
+        if(col.gameObject.tag.Equals("Enemy")) // || col.gameObject.tag.Equals("Block")
         {
             Destroy(col.gameObject);
         }
