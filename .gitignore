@@ -26,8 +26,9 @@ ExportedObj/
 sysinfo.txt
 
 # Builds
-*.apk
 *.unitypackage
+
 Master Thesis VR Project/Library/metadata/
 Master Thesis VR Project/Library/
 Master Thesis VR Project/Temp/
+Master Thesis VR Project/Build/
