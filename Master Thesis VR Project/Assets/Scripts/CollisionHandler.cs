@@ -7,6 +7,7 @@ public class CollisionHandler : MonoBehaviour {
     {
         if(col.gameObject.tag.Equals("Enemy")) // || col.gameObject.tag.Equals("Block")
         {
+            GameObject.Find("Player").GetComponent<InputManager>().updatePoints();
             Destroy(col.gameObject);
         }
         Destroy(gameObject);

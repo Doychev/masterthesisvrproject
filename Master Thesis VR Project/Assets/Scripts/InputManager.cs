@@ -1,12 +1,17 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour {
 
     public Transform projectile;
     public float bulletSpeed;
     public int movementSpeed;
+    public int points = 0;
+    public bool isPlaying = true;
 
-    public GameObject debugText;
+    public GameObject panel;
+    public Text pointsText;
 
 	// Use this for initialization
 	void Start () {
@@ -15,52 +20,74 @@ public class InputManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetButtonDown("Fire"))
+        if (isPlaying)
         {
-            GameObject camera = GameObject.Find("Main Camera");
-            Transform clone = (Transform) Instantiate(projectile, camera.transform.position + camera.transform.forward, transform.rotation);
-            clone.GetComponent<Rigidbody>().AddForce(camera.transform.forward * bulletSpeed);
-        }
-
-        if (Input.GetButtonDown("Jump"))
-        {
-            float distToGround = GetComponent<Collider>().bounds.extents.y;
-            if (Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f))
+            if (Input.GetButtonDown("Fire"))
             {
-                GetComponent<Rigidbody>().AddForce(new Vector3(0, 10, 0), ForceMode.Impulse);
+                GameObject camera = GameObject.Find("Main Camera");
+                Transform clone = (Transform)Instantiate(projectile, camera.transform.position + camera.transform.forward, transform.rotation);
+                clone.GetComponent<Rigidbody>().AddForce(camera.transform.forward * bulletSpeed);
+            }
+
+            if (Input.GetButtonDown("Jump"))
+            {
+                float distToGround = GetComponent<Collider>().bounds.extents.y;
+                if (Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f))
+                {
+                    GetComponent<Rigidbody>().AddForce(new Vector3(0, 10, 0), ForceMode.Impulse);
+                }
+            }
+
+            if (Input.GetButton("Move"))
+            {
+                GameObject cameraObject = GameObject.Find("Main Camera");
+                transform.position += cameraObject.transform.forward * Time.deltaTime * movementSpeed;
+            }
+
+            if (Input.GetButton("MoveBack"))
+            {
+                GameObject cameraObject = GameObject.Find("Main Camera");
+                transform.position -= cameraObject.transform.forward * Time.deltaTime * movementSpeed;
+            }
+
+            if (Input.GetButton("MoveLeft"))
+            {
+                GameObject cameraObject = GameObject.Find("Main Camera");
+                transform.position -= cameraObject.transform.right * Time.deltaTime * movementSpeed;
+            }
+
+            if (Input.GetButton("MoveRight"))
+            {
+                GameObject cameraObject = GameObject.Find("Main Camera");
+                transform.position += cameraObject.transform.right * Time.deltaTime * movementSpeed;
+            }
+
+            if (Input.GetButton("Reset"))
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+                GetComponent<Rigidbody>().velocity = Vector3.zero;
+                GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+            }
+        } else
+        {
+            if (Input.GetButton("Reset"))
+            {
+                SceneManager.LoadScene("level");
             }
         }
+    }
 
-        if (Input.GetButton("Move"))
-        {
-            GameObject cameraObject = GameObject.Find("Main Camera");
-            transform.position += cameraObject.transform.forward * Time.deltaTime * movementSpeed;
-        }
+    public void updatePoints()
+    {
+        points++;
+        pointsText.text = "Points: " + points;
+    }
 
-        if (Input.GetButton("MoveBack"))
-        {
-            GameObject cameraObject = GameObject.Find("Main Camera");
-            transform.position -= cameraObject.transform.forward * Time.deltaTime * movementSpeed;
-        }
-
-        if (Input.GetButton("MoveLeft"))
-        {
-            GameObject cameraObject = GameObject.Find("Main Camera");
-            transform.position -= cameraObject.transform.right * Time.deltaTime * movementSpeed;
-        }
-
-        if (Input.GetButton("MoveRight"))
-        {
-            GameObject cameraObject = GameObject.Find("Main Camera");
-            transform.position += cameraObject.transform.right * Time.deltaTime * movementSpeed;
-        }
-
-        if (Input.GetButton("Reset"))
-        {
-            transform.rotation = Quaternion.Euler(0, 0, 0);
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
-            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        }
+    public void endGame()
+    {
+        panel.SetActive(true);
+        isPlaying = false;
+        //show pop-up
     }
 }
 

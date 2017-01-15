@@ -5,17 +5,16 @@ public class AttackerController : MonoBehaviour {
 
     public float speed;
 
-    private GameObject targetsList;
-    private Transform target;
+    private GameObject[] targetsList;
+    private GameObject target;
 
 	// Use this for initialization
 	void Start () {
-        targetsList = GameObject.Find("Targets");
-        Transform[] targetsArray = targetsList.GetComponentsInChildren<Transform>();
-        int targetIndex = Random.Range(0, targetsArray.Length);
-        target = targetsArray[targetIndex];
+        targetsList = GameObject.FindGameObjectsWithTag("Block");
+        int targetIndex = Random.Range(0, targetsList.Length);
+        target = targetsList[targetIndex];
 
-        transform.LookAt(target);
+        transform.LookAt(target.transform);
         GetComponent<Rigidbody>().AddRelativeForce(0, 0, speed * 10);
     }
 
@@ -24,12 +23,22 @@ public class AttackerController : MonoBehaviour {
         if (col.gameObject.tag.Equals("Block"))
         {
             Destroy(col.gameObject);
+            targetsList = GameObject.FindGameObjectsWithTag("Block");
+            if (targetsList.Length <= 1)
+            {
+                endGame();
+            }
         }
         else if (col.gameObject.tag.Equals("Player"))
         {
-            //TODO game over
+            endGame();
         }
 
         Destroy(gameObject);
+    }
+
+    public void endGame()
+    {
+        GameObject.Find("Player").GetComponent<InputManager>().endGame();
     }
 }
