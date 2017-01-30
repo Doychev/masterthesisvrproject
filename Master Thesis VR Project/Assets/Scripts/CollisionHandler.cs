@@ -10,6 +10,10 @@ public class CollisionHandler : MonoBehaviour {
             GameObject.Find("Player").GetComponent<InputManager>().updatePoints();
             Destroy(col.gameObject);
         }
+        if (col.gameObject.tag.Equals("Player"))
+        {
+            return;
+        }
         Destroy(gameObject);
     }
 }
